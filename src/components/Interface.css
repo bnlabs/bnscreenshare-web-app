@@ -1,0 +1,14 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.fullscreen-video {
+    position: absolu;
+    top: 0;
+    left: 0;
+    width: 100vh;
+    height: 100vh;
+}
