@@ -205,7 +205,7 @@ const Interface = () => {
                 {lobbyId ? 
                     (<>
                         <button onClick={leaveLobby}>Leave Lobby</button>
-                        <StyledToggleStreamButton onClick={toggleStream}>Toggle Camera</StyledToggleStreamButton>
+                        <StyledToggleStreamButton onClick={toggleStream}>Toggle Stream</StyledToggleStreamButton>
                         <StyledToggleAudioButton onClick={toggleAudio}>Toggle Audio</StyledToggleAudioButton>
                     </>) 
                     : 
