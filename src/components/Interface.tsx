@@ -2,6 +2,7 @@ import { SetStateAction, useContext, useEffect, useState } from "react";
 import Video from "./Video";
 import SignalRContext from "./SignalR/SignalRContext";
 import styled from "styled-components";
+import './Interface.css';
 
 let localStream : MediaStream;
 let remoteStream : MediaStream;
@@ -199,26 +200,27 @@ const Interface = () => {
     `
     return (
         <>
+            {lobbyId ? <Video user={"1"}/> : ""}
             <div className="ControlPanel">
-
                 {lobbyId ? 
-                    (<><button onClick={leaveLobby}>Leave Lobby</button>
-                    <StyledToggleStreamButton onClick={toggleStream}>Toggle Camera</StyledToggleStreamButton>
-                    <StyledToggleAudioButton onClick={toggleAudio}>Toggle Audio</StyledToggleAudioButton></>) 
+                    (<>
+                        <button onClick={leaveLobby}>Leave Lobby</button>
+                        <StyledToggleStreamButton onClick={toggleStream}>Toggle Camera</StyledToggleStreamButton>
+                        <StyledToggleAudioButton onClick={toggleAudio}>Toggle Audio</StyledToggleAudioButton>
+                    </>) 
                     : 
-                    <>
+                    <div>
                         <button onClick={createLobby}>Create Lobby</button>
                         <button onClick={handleJoinLobby}>Join Lobby</button>
-                    </>}
+                        <input type="text" value={value} onChange={handleChange}/>
+                    </div>
+                }
 
-                <h1>Lobby ID: {lobbyId}</h1>
-                <input type="text" value={value} onChange={handleChange}/>
+                <p className="ControlPanel">Lobby ID: {lobbyId}</p>
 
                 <StyledContainer>
                 </StyledContainer>
-
             </div>
-            {lobbyId ? <Video user={"1"}/> : ""}
         </>
     );
 };
@@ -239,4 +241,3 @@ const StyledContainer = styled.div`
 `
 
 export default Interface;
-

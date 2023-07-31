@@ -33,9 +33,11 @@ const StyledVideo = styled.video`
     display: grid;
     grid_template-columns: 1fr 1fr;
     gap: 2em;
-    background-color: black;
+    background-color: gray;
     height: 80vh;
     overflow: hidden;
+    border-style: solid;
+    border-color: gray;
 `
 
 export default Video;
