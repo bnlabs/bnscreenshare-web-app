@@ -1,6 +1,7 @@
 import { SetStateAction, useContext, useEffect, useState } from "react";
 import Video from "./Video";
 import SignalRContext from "./SignalR/SignalRContext";
+import { Button } from '@mantine/core';
 
 let localStream : MediaStream;
 let remoteStream : MediaStream;
@@ -31,8 +32,6 @@ const servers = {
 const Interface = () => {
     const [lobbyId, setLobbyId] = useState("");
     const [value, setValue] = useState("");
-    // const [streamButtonColor, setstreamButtonColor] = useState([179,102,249,.9]);
-    // const [audioButtonColor, setAudioButtonColor] = useState([179,102,249,.9]);
 
     const connection = useContext(SignalRContext);
     const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
@@ -162,8 +161,6 @@ const Interface = () => {
         if(videoTrack){
             console.log(videoTrack);
             videoTrack.enabled = !videoTrack.enabled;
-            // if(!videoTrack.enabled){ setstreamButtonColor([179,102,249,.9])}
-            // else{setstreamButtonColor([255,80,80, 1])}
         }
     }
     let toggleAudio = async() => {
@@ -171,8 +168,6 @@ const Interface = () => {
         if(audioTrack){
             console.log(audioTrack);
             audioTrack.enabled = !audioTrack.enabled;
-            // if(!audioTrack.enabled){ setAudioButtonColor([179,102,249,.9])}
-            // else{setAudioButtonColor([255,80,80, 1])}
         }
     }
     
@@ -189,53 +184,27 @@ const Interface = () => {
         }, [])
     window.addEventListener('beforeunload', leaveLobby);
     
-    // const StyledToggleStreamButton = styled.button`
-    //     background-color: rgb(${streamButtonColor[0]}, ${streamButtonColor[1]}, ${streamButtonColor[2]},${streamButtonColor[3]});
-    // `
-
-    // const StyledToggleAudioButton = styled.button`
-    //     background-color: rgb(${audioButtonColor[0]}, ${audioButtonColor[1]}, ${audioButtonColor[2]},${audioButtonColor[3]});
-    // `
     return (
         <>
             {lobbyId ? <Video user={"1"}/> : ""}
-            <div className="ControlPanel">
+            <div className="ControlPanel text-white p-3">
                 {lobbyId ? 
-                    (<>
-                        <button onClick={leaveLobby}>Leave Lobby</button>
-                        <button onClick={toggleStream}>Toggle Stream</button>
-                        <button onClick={toggleAudio}>Toggle Audio</button>
-                    </>) 
+                    (<div>
+                        <Button variant="filled" color="gray" onClick={leaveLobby}>Leave Lobby</Button>
+                        <Button variant="filled" color="gray" onClick={toggleStream}>Toggle Stream</Button>
+                        <Button variant="filled" color="gray" onClick={toggleAudio}>Toggle Audio</Button>
+                    </div>)
                     : 
-                    <div>
-                        <button onClick={createLobby}>Create Lobby</button>
-                        <button onClick={handleJoinLobby}>Join Lobby</button>
-                        <input type="text" value={value} onChange={handleChange}/>
-                    </div>
+                    (<div className="bg-transparent">
+                        <Button variant="filled" color="red" onClick={createLobby}>Create Lobby</Button>
+                        <Button variant="filled" color="red" onClick={handleJoinLobby}>Join Lobby</Button>
+                        <input type="text" className="bg-white text-black" value={value} onChange={handleChange}/>
+                    </div>)
                 }
-
-                <p className="ControlPanel">Lobby ID: {lobbyId}</p>
-                <p className="text-lg font-bold underline">
-                        Hello world!
-                </p>
+                <p className="ControlPanel m-5">Lobby ID: {lobbyId}</p>
             </div>
         </>
     );
 };
-
-// const StyledContainer = styled.div`
-//     background-color: rgb(179, 102, 249 .9);
-//     padding: 20px;
-//     border-radius: 50%;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     cursor: pointer;
-//     position: fixed;
-//     bottom: 20px;
-//     left: 50%;
-//     transform:translateX(-50%);
-//     gap: 1em;
-// `
 
 export default Interface;
