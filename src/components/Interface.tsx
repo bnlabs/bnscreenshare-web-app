@@ -1,8 +1,6 @@
 import { SetStateAction, useContext, useEffect, useState } from "react";
 import Video from "./Video";
 import SignalRContext from "./SignalR/SignalRContext";
-import styled from "styled-components";
-import './Interface.css';
 
 let localStream : MediaStream;
 let remoteStream : MediaStream;
@@ -33,8 +31,8 @@ const servers = {
 const Interface = () => {
     const [lobbyId, setLobbyId] = useState("");
     const [value, setValue] = useState("");
-    const [streamButtonColor, setstreamButtonColor] = useState([179,102,249,.9]);
-    const [audioButtonColor, setAudioButtonColor] = useState([179,102,249,.9]);
+    // const [streamButtonColor, setstreamButtonColor] = useState([179,102,249,.9]);
+    // const [audioButtonColor, setAudioButtonColor] = useState([179,102,249,.9]);
 
     const connection = useContext(SignalRContext);
     const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
@@ -164,8 +162,8 @@ const Interface = () => {
         if(videoTrack){
             console.log(videoTrack);
             videoTrack.enabled = !videoTrack.enabled;
-            if(!videoTrack.enabled){ setstreamButtonColor([179,102,249,.9])}
-            else{setstreamButtonColor([255,80,80, 1])}
+            // if(!videoTrack.enabled){ setstreamButtonColor([179,102,249,.9])}
+            // else{setstreamButtonColor([255,80,80, 1])}
         }
     }
     let toggleAudio = async() => {
@@ -173,8 +171,8 @@ const Interface = () => {
         if(audioTrack){
             console.log(audioTrack);
             audioTrack.enabled = !audioTrack.enabled;
-            if(!audioTrack.enabled){ setAudioButtonColor([179,102,249,.9])}
-            else{setAudioButtonColor([255,80,80, 1])}
+            // if(!audioTrack.enabled){ setAudioButtonColor([179,102,249,.9])}
+            // else{setAudioButtonColor([255,80,80, 1])}
         }
     }
     
@@ -191,13 +189,13 @@ const Interface = () => {
         }, [])
     window.addEventListener('beforeunload', leaveLobby);
     
-    const StyledToggleStreamButton = styled.button`
-        background-color: rgb(${streamButtonColor[0]}, ${streamButtonColor[1]}, ${streamButtonColor[2]},${streamButtonColor[3]});
-    `
+    // const StyledToggleStreamButton = styled.button`
+    //     background-color: rgb(${streamButtonColor[0]}, ${streamButtonColor[1]}, ${streamButtonColor[2]},${streamButtonColor[3]});
+    // `
 
-    const StyledToggleAudioButton = styled.button`
-        background-color: rgb(${audioButtonColor[0]}, ${audioButtonColor[1]}, ${audioButtonColor[2]},${audioButtonColor[3]});
-    `
+    // const StyledToggleAudioButton = styled.button`
+    //     background-color: rgb(${audioButtonColor[0]}, ${audioButtonColor[1]}, ${audioButtonColor[2]},${audioButtonColor[3]});
+    // `
     return (
         <>
             {lobbyId ? <Video user={"1"}/> : ""}
@@ -205,8 +203,8 @@ const Interface = () => {
                 {lobbyId ? 
                     (<>
                         <button onClick={leaveLobby}>Leave Lobby</button>
-                        <StyledToggleStreamButton onClick={toggleStream}>Toggle Stream</StyledToggleStreamButton>
-                        <StyledToggleAudioButton onClick={toggleAudio}>Toggle Audio</StyledToggleAudioButton>
+                        <button onClick={toggleStream}>Toggle Stream</button>
+                        <button onClick={toggleAudio}>Toggle Audio</button>
                     </>) 
                     : 
                     <div>
@@ -217,27 +215,27 @@ const Interface = () => {
                 }
 
                 <p className="ControlPanel">Lobby ID: {lobbyId}</p>
-
-                <StyledContainer>
-                </StyledContainer>
+                <p className="text-lg font-bold underline">
+                        Hello world!
+                </p>
             </div>
         </>
     );
 };
 
-const StyledContainer = styled.div`
-    background-color: rgb(179, 102, 249 .9);
-    padding: 20px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform:translateX(-50%);
-    gap: 1em;
-`
+// const StyledContainer = styled.div`
+//     background-color: rgb(179, 102, 249 .9);
+//     padding: 20px;
+//     border-radius: 50%;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     cursor: pointer;
+//     position: fixed;
+//     bottom: 20px;
+//     left: 50%;
+//     transform:translateX(-50%);
+//     gap: 1em;
+// `
 
 export default Interface;

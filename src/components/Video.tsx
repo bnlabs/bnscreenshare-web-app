@@ -31,13 +31,12 @@ const Video = ({user} : {user:string}) => {
 const StyledVideo = styled.video`
     margin: 10px;
     display: grid;
-    grid_template-columns: 1fr 1fr;
     gap: 2em;
-    background-color: gray;
-    height: 80vh;
+    background-color: rgb(40, 40, 40, .5);
+    height: 70vh;
     overflow: hidden;
     border-style: solid;
-    border-color: gray;
+    border-color: black;
 `
 
 export default Video;
