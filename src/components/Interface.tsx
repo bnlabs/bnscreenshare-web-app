@@ -190,14 +190,14 @@ const Interface = () => {
             <div className="ControlPanel text-white p-3">
                 {lobbyId ? 
                     (<div>
-                        <Button variant="filled" color="gray" onClick={leaveLobby}>Leave Lobby</Button>
-                        <Button variant="filled" color="gray" onClick={toggleStream}>Toggle Stream</Button>
-                        <Button variant="filled" color="gray" onClick={toggleAudio}>Toggle Audio</Button>
+                        <Button variant="outline" color="gray" onClick={leaveLobby}>Leave Lobby</Button>
+                        <Button variant="outline" color="gray" onClick={toggleStream}>Toggle Stream</Button>
+                        <Button variant="outline" color="gray" onClick={toggleAudio}>Toggle Audio</Button>
                     </div>)
                     : 
                     (<div className="bg-transparent">
-                        <Button variant="filled" color="red" onClick={createLobby}>Create Lobby</Button>
-                        <Button variant="filled" color="red" onClick={handleJoinLobby}>Join Lobby</Button>
+                        <Button variant="outline" color="gray" onClick={createLobby}>Create Lobby</Button>
+                        <Button variant="outline" color="gray" onClick={handleJoinLobby}>Join Lobby</Button>
                         <input type="text" className="bg-white text-black" value={value} onChange={handleChange}/>
                     </div>)
                 }
