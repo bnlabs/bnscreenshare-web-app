@@ -186,10 +186,10 @@ const Interface = () => {
     
     return (
         <>
-            {lobbyId ? <Video user={"1"}/> : ""}
             <div className="ControlPanel text-white p-3">
                 {lobbyId ? 
                     (<div>
+                        <Video user={"1"}/>
                         <Button variant="outline" color="gray" onClick={leaveLobby}>Leave Lobby</Button>
                         <Button variant="outline" color="gray" onClick={toggleStream}>Toggle Stream</Button>
                         <Button variant="outline" color="gray" onClick={toggleAudio}>Toggle Audio</Button>
@@ -198,7 +198,7 @@ const Interface = () => {
                     (<div className="bg-transparent">
                         <Button variant="outline" color="gray" onClick={createLobby}>Create Lobby</Button>
                         <Button variant="outline" color="gray" onClick={handleJoinLobby}>Join Lobby</Button>
-                        <input type="text" className="bg-white text-black" value={value} onChange={handleChange}/>
+                        <input type="text" placeholder="LobbyId" className="bg-white text-black m-1" value={value} onChange={handleChange}/>
                     </div>)
                 }
                 <p className="ControlPanel m-5">Lobby ID: {lobbyId}</p>
