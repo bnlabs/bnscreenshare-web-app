@@ -7,9 +7,11 @@ import WebRTCContext from "./WebRTC/WebRTCContext";
 const Interface = () => {
     const [lobbyId, setLobbyId] = useState("");
     const [value, setValue] = useState("");
+    const [isHost, setIsHost] = useState(false);
 
     const connection = useContext(SignalRContext);
     const webrtc = useContext(WebRTCContext);
+
     const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setValue(event.target.value);
     }
@@ -23,6 +25,7 @@ const Interface = () => {
     }
     const handleJoinLobby = async () => {
         connection?.invoke("JoinLobby", value);
+        setIsHost(false);
     }
     const handleReceiveOffer = async (offer:string, uid:string) => {
         const message = JSON.parse(offer);
@@ -44,15 +47,13 @@ const Interface = () => {
     }
     let createLobby = async () => {
         connection?.invoke("CreateLobby");
+        setIsHost(true);
     }
     let leaveLobby = async () =>{
         connection?.invoke("LeaveLobby", lobbyId);
         setLobbyId("");
     }
 
-    
-
-    
     useEffect(() => {
         connection?.start()
           .then(() => {
@@ -73,8 +74,14 @@ const Interface = () => {
                     (<div>
                         <Video user={"1"}/>
                         <Button variant="outline" color="gray" onClick={leaveLobby}>Leave Lobby</Button>
-                        <Button variant="outline" color="gray" onClick={webrtc?.toggleStream}>Toggle Stream</Button>
-                        <Button variant="outline" color="gray" onClick={webrtc?.toggleAudio}>Toggle Audio</Button>
+                        {isHost ? 
+                            <>
+                                <Button variant="outline" color="gray" onClick={webrtc?.toggleStream}>Toggle Stream</Button>
+                                <Button variant="outline" color="gray" onClick={webrtc?.toggleAudio}>Toggle Audio</Button>
+                            </>
+                            :
+                                ""
+                        }
                         <p className="ControlPanel m-5">Lobby ID: {lobbyId}</p>
                     </div>)
                     : 
