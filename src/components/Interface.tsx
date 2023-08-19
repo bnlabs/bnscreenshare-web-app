@@ -65,6 +65,15 @@ const Interface = () => {
     const handleUserLeft = async (value:string) =>{
         console.log(value);
     }
+    let createLobby = async () => {
+        connection?.invoke("CreateLobby");
+    }
+    let leaveLobby = async () =>{
+        connection?.invoke("LeaveLobby", lobbyId);
+        setLobbyId("");
+    }
+
+    
     let createPeerConnection = async (uid:string) => {
         peerConnection = new RTCPeerConnection(servers);
         remoteStream = new MediaStream();
@@ -138,13 +147,6 @@ const Interface = () => {
             peerConnection.setRemoteDescription(answer)
         }
     }
-    let createLobby = async () => {
-        connection?.invoke("CreateLobby");
-    }
-    let leaveLobby = async () =>{
-        connection?.invoke("LeaveLobby", lobbyId);
-        setLobbyId("");
-    }
     let toggleStream = async() => {
         let videoTrack;
         try{
@@ -193,6 +195,7 @@ const Interface = () => {
                         <Button variant="outline" color="gray" onClick={leaveLobby}>Leave Lobby</Button>
                         <Button variant="outline" color="gray" onClick={toggleStream}>Toggle Stream</Button>
                         <Button variant="outline" color="gray" onClick={toggleAudio}>Toggle Audio</Button>
+                        <p className="ControlPanel m-5">Lobby ID: {lobbyId}</p>
                     </div>)
                     : 
                     (<div className="bg-transparent">
@@ -201,7 +204,6 @@ const Interface = () => {
                         <input type="text" placeholder="LobbyId" className="bg-white text-black m-1" value={value} onChange={handleChange}/>
                     </div>)
                 }
-                <p className="ControlPanel m-5">Lobby ID: {lobbyId}</p>
             </div>
         </>
     );
