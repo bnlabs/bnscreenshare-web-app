@@ -1,7 +1,10 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { Button } from '@mantine/core';
 
 const Video = ({user} : {user:string}) => {
+    const [isMuted, setIsMuted] = useState(false);
+    
     let id;
     if(user === "1")
     {
@@ -12,6 +15,15 @@ const Video = ({user} : {user:string}) => {
     }
 
     const videoRef = useRef<HTMLVideoElement | null>(null);
+
+    const toggleMute = () => {
+        const video = videoRef.current;
+        if(video)
+        {
+            video.muted = !video.muted;
+            setIsMuted(video.muted);
+        }
+    };
 
     const handleFullScreen = () => {
         if (videoRef.current) {
@@ -24,7 +36,12 @@ const Video = ({user} : {user:string}) => {
     }
 
     return (<>
-        <StyledVideo ref={videoRef} className="video-player" id={id} autoPlay playsInline onClick={handleFullScreen}></StyledVideo>
+        <Button variant="outline" color="gray" onClick={handleFullScreen}>Fullscreen</Button>
+        <Button variant="outline" color="gray" onClick={toggleMute}>
+            {isMuted ? 'Unmute' : 'Mute'}
+        </Button>
+        <StyledVideo ref={videoRef} className="video-player" id={id} autoPlay playsInline onClick={handleFullScreen}>
+        </StyledVideo>
     </>)
 }
 
