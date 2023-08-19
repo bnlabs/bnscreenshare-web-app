@@ -1,5 +1,5 @@
 import { HubConnection } from "@microsoft/signalr";
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode } from "react";
 
 interface WebRTCContextValues {
     getPeerConnection: () => Promise<RTCPeerConnection | null>;
@@ -45,9 +45,6 @@ let remoteStream : MediaStream;
 let peerConnection : RTCPeerConnection;
 
 export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
-    // const [peerConnection, setPeerConnection] = useState<RTCPeerConnection | null>(null);
-    // const [localStream, setLocalStream] = useState<MediaStream | null>(null);
-    // const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
 
     const getPeerConnection = async () => {
         return peerConnection;
