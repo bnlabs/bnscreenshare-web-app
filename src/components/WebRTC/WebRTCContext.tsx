@@ -5,8 +5,8 @@ interface WebRTCContextValues {
     getPeerConnection: () => Promise<RTCPeerConnection | null>;
     getLocalStream: () => Promise<MediaStream | null>;
     getRemoteStream: () => Promise<MediaStream | null>;
-    createOffer: (uid:string, connection:HubConnection) => Promise<void>;
-    createAnswer: (uid:string, offer: RTCSessionDescriptionInit, connection:HubConnection) => Promise<void>;
+    createOffer: (uid:string, connection:HubConnection | null) => Promise<void>;
+    createAnswer: (uid:string, offer: RTCSessionDescriptionInit, connection:HubConnection | null) => Promise<void>;
     addAnswer: (answer: RTCSessionDescriptionInit) => Promise<void>;
     toggleStream: () => Promise<void>;
     toggleAudio: () => Promise<void>;
@@ -40,118 +40,108 @@ const streamSetting = {
         sampleSize: 16
 }};
 
+let localStream : MediaStream;
+let remoteStream : MediaStream;
+let peerConnection : RTCPeerConnection;
+
 export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
-    const [peerConnection, setPeerConnection] = useState<RTCPeerConnection | null>(null);
-    const [localStream, setLocalStream] = useState<MediaStream | null>(null);
-    const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+    // const [peerConnection, setPeerConnection] = useState<RTCPeerConnection | null>(null);
+    // const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+    // const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
 
     const getPeerConnection = async () => {
-        if (!peerConnection) {
-            setPeerConnection(new RTCPeerConnection(servers));
-        }
         return peerConnection;
     };
+    
+    const createPeerConnection = async (uid:string, connection:HubConnection | null) => {
+        peerConnection = new RTCPeerConnection(servers);
+        remoteStream = new MediaStream();
 
-    const createPeerConnection = async (uid:string, connection:HubConnection) => {
-        const PC = await getPeerConnection();
-        const LS = await getLocalStream();
-        const RS = await getRemoteStream();
+        if(!localStream){
+            localStream = await navigator.mediaDevices.getDisplayMedia(streamSetting);
+        }
 
-        if(LS && PC){
-            LS.getTracks().forEach((track: MediaStreamTrack) => {
-                PC.addTrack(track, LS)
+        localStream.getTracks().forEach((track: MediaStreamTrack) => {
+            peerConnection.addTrack(track, localStream)
+        })
+    
+        peerConnection.ontrack = (event) => {
+            event.streams[0].getTracks().forEach((track)=>
+            {
+                remoteStream.addTrack(track);
             })
         }
-    
-        if(RS && PC)
-        {
-            PC.ontrack = (event) => {
-                event.streams[0].getTracks().forEach((track)=>
-                {
-                    RS.addTrack(track);
-                })
+
+        peerConnection.onicecandidate = async (event) => {
+            if(event.candidate)
+            {
+                connection?.invoke("SendOffer", JSON.stringify({'type': 'candidate', 'candidate': event.candidate}), uid);
             }
         }
-    
-        if(PC)
-        {
-            PC.onicecandidate = async (event) => {
-                if(event.candidate)
-                {
-                    connection?.invoke("SendOffer", JSON.stringify({'type': 'candidate', 'candidate': event.candidate}), uid);
-                }
-            }
-        }
+
     }
 
-    const createPeerConnectionAnswer = async (uid:string, connection:HubConnection) => {
-        const PC = await getPeerConnection();
-        const RS = await getRemoteStream();
+    const createPeerConnectionAnswer = async (uid:string, connection:HubConnection | null) => {
+        peerConnection = new RTCPeerConnection(servers);
+        remoteStream = new MediaStream();
+        let user2 = document.getElementById('user-1') as HTMLMediaElement;
     
-        if(PC && RS)
-        {
-            PC.ontrack = (event) => {
-                event.streams[0].getTracks().forEach((track)=>
-                {
-                    RS.addTrack(track);
-                })
-            }
+        if(user2) {
+            user2.srcObject = remoteStream;
         }
-    
-        if(PC)
-        {
-            PC.onicecandidate = async (event) => {
-                if(event.candidate)
-                {
-                    connection?.invoke("SendOffer", JSON.stringify({'type': 'candidate', 'candidate': event.candidate}), uid);
-                }
+        peerConnection.ontrack = (event) => {
+            event.streams[0].getTracks().forEach((track)=>
+            {
+                remoteStream.addTrack(track);
+            })
+        }
+
+        peerConnection.onicecandidate = async (event) => {
+            if(event.candidate)
+            {
+                connection?.invoke("SendOffer", JSON.stringify({'type': 'candidate', 'candidate': event.candidate}), uid);
             }
         }
     }
-    const createOffer = async (uid:string, connection:HubConnection) => {
+    const createOffer = async (uid:string, connection:HubConnection | null) => {
         console.log("CREATING OFFER");
         console.log(uid);
-        const PC = await getPeerConnection();
         await createPeerConnection(uid, connection);
-        if(PC)
+        if(peerConnection)
         {
-            let offer = await PC.createOffer();
+            let offer = await peerConnection.createOffer();
             console.log(offer);
-            await PC.setLocalDescription(offer);
+            await peerConnection.setLocalDescription(offer);
             const text = JSON.stringify({'type': 'offer', 'offer': offer});
             connection?.invoke("SendOffer", text, uid);
         }
     }
-    const createAnswer = async (uid:string, offer: RTCSessionDescriptionInit, connection:HubConnection) => {
+    const createAnswer = async (uid:string, offer: RTCSessionDescriptionInit, connection:HubConnection | null) => {
         console.log(uid);
         console.log(offer);
-        const PC = await getPeerConnection();
 
         await createPeerConnectionAnswer(uid, connection);
-        if(PC)
-        {
-            await PC.setRemoteDescription(offer);
-            const answer = await PC.createAnswer();
-            await PC.setLocalDescription(answer);
-            connection?.invoke("SendOffer", JSON.stringify({'type': 'answer', 'answer': answer}), uid);
-        }
+        await peerConnection.setRemoteDescription(offer);
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+        connection?.invoke("SendOffer", JSON.stringify({'type': 'answer', 'answer': answer}), uid);
+
     }
 
     const addAnswer = async (answer: RTCSessionDescriptionInit) => {
-        const PC = await getPeerConnection();
-        if(PC && !PC.currentRemoteDescription){
-            PC.setRemoteDescription(answer)
+        if(peerConnection && !peerConnection.currentRemoteDescription){
+            peerConnection.setRemoteDescription(answer)
         }
     }
 
-    const toggleStream = async() => {
+    let toggleStream = async() => {
+        console.log("stream button");
         let videoTrack;
         try{
-            if(localStream)
             videoTrack = localStream.getTracks().find(track => track.kind === 'video');
         }
         catch{
-            setLocalStream(await navigator.mediaDevices.getDisplayMedia(streamSetting));
+            localStream = await navigator.mediaDevices.getDisplayMedia(streamSetting);
             let user1 = document.getElementById('user-1') as HTMLMediaElement;
             if(user1) {
                 user1.srcObject = localStream;
@@ -178,22 +168,19 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
 
     const getLocalStream = async () => {
         if(!localStream){
-            const lc = await navigator.mediaDevices.getDisplayMedia(streamSetting);
-            setLocalStream(lc);
+            localStream = await navigator.mediaDevices.getDisplayMedia(streamSetting);
         }
         return localStream;
     }
 
     const getRemoteStream = async () => {
         if(!remoteStream){
-            const lc = new MediaStream();
-            setRemoteStream(lc);
+            remoteStream = new MediaStream();
         }
         return remoteStream;
     }
-
   return (
-    <WebRTCContext.Provider value={{ 
+    <WebRTCContext.Provider value={{
         getPeerConnection,
         getLocalStream,
         getRemoteStream,
