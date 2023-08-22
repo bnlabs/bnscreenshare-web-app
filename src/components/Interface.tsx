@@ -45,11 +45,11 @@ const Interface = () => {
     const handleUserLeft = async (value:string) =>{
         console.log(value);
     }
-    let createLobby = async () => {
+    const createLobby = async () => {
         connection?.invoke("CreateLobby");
         setIsHost(true);
     }
-    let leaveLobby = async () =>{
+    const leaveLobby = async () =>{
         connection?.invoke("LeaveLobby", lobbyId);
         setLobbyId("");
     }
@@ -72,6 +72,7 @@ const Interface = () => {
             <div className="ControlPanel text-white p-3">
                 {lobbyId ? 
                     (<div>
+                        <p className="ControlPanel m-5">Lobby ID: {lobbyId}</p>
                         <Video user={"1"}/>
                         <Button variant="outline" color="gray" onClick={leaveLobby}>Leave Lobby</Button>
                         {isHost ? 
@@ -82,7 +83,6 @@ const Interface = () => {
                             :
                                 ""
                         }
-                        <p className="ControlPanel m-5">Lobby ID: {lobbyId}</p>
                     </div>)
                     : 
                     (<div className="bg-transparent">

@@ -66,21 +66,23 @@ const Video = ({user} : {user:string}) => {
     };
     
     return (<>
-        <Button className='mx-2' variant="outline" color="gray" onClick={handleFullScreen}>Fullscreen</Button>
-        <Button className='mx-2 items-center justify-center w-28' variant="outline" color="gray" onClick={toggleMute}>
-            {isMuted ? 'Unmute' : 'Mute'}
-        </Button>
-        <input
-            className='mx-2'
-            type="range" 
-            min="0" 
-            max="1" 
-            step="0.01" 
-            value={volume}
-            onChange={changeVolume} 
-        />
         <StyledVideo ref={videoRef} className="video-player" id={id} autoPlay playsInline onClick={handleFullScreen}>
         </StyledVideo>
+        <div className='my-2'>
+            <Button className='mx-2' variant="outline" color="gray" onClick={handleFullScreen}>Fullscreen</Button>
+            <Button className='mx-2 items-center justify-center w-28' variant="outline" color="gray" onClick={toggleMute}>
+                {isMuted ? 'Unmute' : 'Mute'}
+            </Button>
+            <input
+                className='mx-2'
+                type="range" 
+                min="0" 
+                max="1" 
+                step="0.01" 
+                value={volume}
+                onChange={changeVolume} 
+            />
+        </div>
     </>)
 }
 
