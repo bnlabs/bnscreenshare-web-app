@@ -53,6 +53,13 @@ const Interface = () => {
         connection?.invoke("LeaveLobby", lobbyId);
         setLobbyId("");
     }
+    const handleCopy = async () => {
+        try {
+          await navigator.clipboard.writeText(lobbyId);
+        } catch (err) {
+          console.error('Failed to copy text: ', err);
+        }
+      };
 
     useEffect(() => {
         connection?.start()
@@ -72,7 +79,12 @@ const Interface = () => {
             <div className="ControlPanel text-white p-3">
                 {lobbyId ? 
                     (<div>
-                        <p className="ControlPanel m-5">Lobby ID: {lobbyId}</p>
+                        <div className="flex my-2">
+                            <p className="ControlPanel mx-3">Lobby ID: {lobbyId}</p>
+                            <Button variant="outline" color="gray" onClick={handleCopy}>
+                                Copy Lobby ID
+                            </Button>
+                        </div>
                         <Video user={"1"}/>
                         <Button variant="outline" color="gray" onClick={leaveLobby}>Leave Lobby</Button>
                         {isHost ? 
