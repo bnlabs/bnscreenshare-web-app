@@ -1,6 +1,9 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@mantine/core';
+import FullscreenOutlinedIcon from '@mui/icons-material/FullscreenOutlined';
+import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
+import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
 
 const Video = ({user} : {user:string}) => {
     const [isMuted, setIsMuted] = useState(false);
@@ -65,14 +68,10 @@ const Video = ({user} : {user:string}) => {
         setVolume(newVolume);
     };
     
-    return (<>
+    return (<div className='relative'>
         <StyledVideo ref={videoRef} className="video-player" id={id} autoPlay playsInline onClick={handleFullScreen}>
         </StyledVideo>
-        <div className='my-2'>
-            <Button className='mx-2' variant="outline" color="gray" onClick={handleFullScreen}>Fullscreen</Button>
-            <Button className='mx-2 items-center justify-center w-28' variant="outline" color="gray" onClick={toggleMute}>
-                {isMuted ? 'Unmute' : 'Mute'}
-            </Button>
+        <div className='buttons my-2'>
             <input
                 className='mx-2'
                 type="range" 
@@ -82,8 +81,12 @@ const Video = ({user} : {user:string}) => {
                 value={volume}
                 onChange={changeVolume} 
             />
+            <Button className='items-center justify-center' variant="outline" color="gray" onClick={toggleMute}>
+                {isMuted ? <VolumeOffOutlinedIcon/> : <VolumeUpOutlinedIcon/>}
+            </Button>
+            <Button variant="outline" color="gray" onClick={handleFullScreen}><FullscreenOutlinedIcon/></Button>
         </div>
-    </>)
+    </div>)
 }
 
 const StyledVideo = styled.video`

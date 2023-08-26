@@ -3,6 +3,9 @@ import Video from "./Video";
 import SignalRContext from "./SignalR/SignalRContext";
 import { Button } from '@mantine/core';
 import WebRTCContext from "./WebRTC/WebRTCContext";
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import TvOutlinedIcon from '@mui/icons-material/TvOutlined';
+import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 
 const Interface = () => {
     const [lobbyId, setLobbyId] = useState("");
@@ -86,11 +89,13 @@ const Interface = () => {
                             </Button>
                         </div>
                         <Video user={"1"}/>
-                        <Button variant="outline" color="gray" onClick={leaveLobby}>Leave Lobby</Button>
+                        <Button variant="outline" color="gray" onClick={leaveLobby}><LogoutOutlinedIcon/></Button>
                         {isHost ? 
                             <>
-                                <Button variant="outline" color="gray" onClick={webrtc?.toggleStream}>Toggle Stream</Button>
-                                <Button variant="outline" color="gray" onClick={webrtc?.toggleAudio}>Toggle Audio</Button>
+                                <Button variant="outline" color="gray" onClick={webrtc?.toggleStream}><TvOutlinedIcon/></Button>
+                                <Button variant="outline" color="gray" onClick={webrtc?.toggleAudio}>
+                                    <VolumeUpOutlinedIcon/>
+                                </Button>
                             </>
                             :
                                 ""
