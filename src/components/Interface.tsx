@@ -81,25 +81,23 @@ const Interface = () => {
         <>
             <div className="ControlPanel text-white p-3">
                 {lobbyId ? 
-                    (<div>
-                        <div className="flex my-2">
-                            <p className="ControlPanel mx-3">Lobby ID: {lobbyId}</p>
+                    (<div className="LobbyUI">
+                        <div className="LobbyControl flex my-2">
+                            <p className="mx-3 mt-1">Lobby ID: {lobbyId}</p>
                             <Button variant="outline" color="gray" onClick={handleCopy}>
                                 Copy Lobby ID
                             </Button>
+                            {isHost ? 
+                                <>
+                                    <Button variant="outline" color="gray" onClick={webrtc?.toggleStream}><TvOutlinedIcon/></Button>
+                                    <Button variant="outline" color="gray" onClick={webrtc?.toggleAudio}><VolumeUpOutlinedIcon/></Button>
+                                </>
+                                :
+                                    ""
+                            }
+                            <Button variant="outline" color="gray" onClick={leaveLobby}><LogoutOutlinedIcon/></Button>
                         </div>
                         <Video user={"1"}/>
-                        <Button variant="outline" color="gray" onClick={leaveLobby}><LogoutOutlinedIcon/></Button>
-                        {isHost ? 
-                            <>
-                                <Button variant="outline" color="gray" onClick={webrtc?.toggleStream}><TvOutlinedIcon/></Button>
-                                <Button variant="outline" color="gray" onClick={webrtc?.toggleAudio}>
-                                    <VolumeUpOutlinedIcon/>
-                                </Button>
-                            </>
-                            :
-                                ""
-                        }
                     </div>)
                     : 
                     (<div className="bg-transparent">

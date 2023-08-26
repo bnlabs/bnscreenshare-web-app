@@ -94,7 +94,7 @@ const StyledVideo = styled.video`
     display: grid;
     gap: 2em;
     background-color: rgb(40, 40, 40, .5);
-    height: 70vh;
+    height: 76vh;
     overflow: hidden;
     border-style: solid;
     border-color: black;
