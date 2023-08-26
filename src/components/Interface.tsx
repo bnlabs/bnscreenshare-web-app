@@ -1,23 +1,28 @@
-import { SetStateAction, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Video from "./Video";
 import SignalRContext from "./SignalR/SignalRContext";
-import { Button } from '@mantine/core';
+import { TextInput, Button, Group, Box } from '@mantine/core';
 import WebRTCContext from "./WebRTC/WebRTCContext";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import TvOutlinedIcon from '@mui/icons-material/TvOutlined';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
+import { useForm } from '@mantine/form';
 
 const Interface = () => {
     const [lobbyId, setLobbyId] = useState("");
-    const [value, setValue] = useState("");
     const [isHost, setIsHost] = useState(false);
 
     const connection = useContext(SignalRContext);
     const webrtc = useContext(WebRTCContext);
+    const form = useForm({
+        initialValues: {
+            lobbyId: '',
+          },
+          validate: {
+            lobbyId: (value) => (/^.{5}$/.test(value) ? null : 'Invalid Id'),
+          },
+      });
 
-    const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-        setValue(event.target.value);
-    }
     const handleJoinedGroup = async (lobbyId:string) => {
         console.log("LobbyId: ", lobbyId);
         setLobbyId(lobbyId);
@@ -26,8 +31,9 @@ const Interface = () => {
         console.log("A new user joined: ", uid);
         webrtc?.createOffer(uid, connection);
     }
-    const handleJoinLobby = async () => {
-        connection?.invoke("JoinLobby", value);
+    const handleJoinLobby = async ({ lobbyId } : { lobbyId:string }) => {
+        console.log("lobbyId");
+        connection?.invoke("JoinLobby", lobbyId);
         setIsHost(false);
     }
     const handleReceiveOffer = async (offer:string, uid:string) => {
@@ -101,9 +107,26 @@ const Interface = () => {
                     </div>)
                     : 
                     (<div className="bg-transparent">
-                        <Button variant="outline" color="gray" onClick={createLobby}>Create Lobby</Button>
-                        <Button variant="outline" color="gray" onClick={handleJoinLobby}>Join Lobby</Button>
-                        <input type="text" placeholder="LobbyId" className="bg-white text-black m-1" value={value} onChange={handleChange}/>
+                        
+                        <Box maw={300} mx="auto">
+                        <form onSubmit={form.onSubmit((input) => handleJoinLobby(input))}>
+                            <TextInput
+                            withAsterisk
+                            label="LobbyId"
+                            placeholder="23a4e"
+                            radius="xl"
+                            size="xl"
+                            {...form.getInputProps('lobbyId')}
+                            />
+
+                            <Group position="right" mt="md">
+                            <div className="px-8">
+                                <Button variant="outline" color="gray" onClick={createLobby}>Create Lobby</Button>
+                                <Button variant="outline" color="gray" type="submit">Join Lobby</Button>
+                            </div>
+                            </Group>
+                        </form>
+                        </Box>
                     </div>)
                 }
             </div>
