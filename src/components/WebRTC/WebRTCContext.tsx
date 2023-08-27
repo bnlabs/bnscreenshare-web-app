@@ -40,8 +40,8 @@ const streamSetting = {
         sampleSize: 16
 }};
 
-let localStream : MediaStream;
-let remoteStream : MediaStream;
+let localStream : MediaStream | null;
+let remoteStream : MediaStream | null;
 let peerConnection : RTCPeerConnection;
 
 export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
@@ -59,13 +59,13 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         }
 
         localStream.getTracks().forEach((track: MediaStreamTrack) => {
-            peerConnection.addTrack(track, localStream)
-        })
+            peerConnection.addTrack(track, localStream as MediaStream);
+        });
     
         peerConnection.ontrack = (event) => {
             event.streams[0].getTracks().forEach((track)=>
             {
-                remoteStream.addTrack(track);
+                remoteStream?.addTrack(track);
             })
         }
 
@@ -89,7 +89,7 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         peerConnection.ontrack = (event) => {
             event.streams[0].getTracks().forEach((track)=>
             {
-                remoteStream.addTrack(track);
+                remoteStream?.addTrack(track);
             })
         }
 
@@ -131,25 +131,37 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         }
     }
 
-    let toggleStream = async() => {
+    const toggleStream = async () => {
         console.log("stream button");
-        let videoTrack;
-        try{
-            videoTrack = localStream.getTracks().find(track => track.kind === 'video');
-        }
-        catch{
-            localStream = await navigator.mediaDevices.getDisplayMedia(streamSetting);
+        
+        // Check if localStream exists and if it has video tracks
+        let videoTrack = localStream && localStream.getVideoTracks()[0];
+        
+        // If videoTrack exists and is still active, stop the stream.
+        if (videoTrack && videoTrack.readyState !== 'ended') {
+            localStream?.getTracks().forEach(track => track.stop());
+            
             let user1 = document.getElementById('user-1') as HTMLMediaElement;
             if(user1) {
-                user1.srcObject = localStream;
+                user1.srcObject = null;  // Clear the video element source
+            }
+    
+            localStream = null;  // Clear the localStream reference
+        } else {
+            // If videoTrack is ended or doesn't exist, try to acquire the stream
+            try {
+                localStream = await navigator.mediaDevices.getDisplayMedia(streamSetting);
+                let user1 = document.getElementById('user-1') as HTMLMediaElement;
+                if(user1) {
+                    user1.srcObject = localStream;
+                }
+            } catch (err) {
+                console.error("Error acquiring stream: ", err);
             }
         }
-
-        if(videoTrack){
-            console.log(videoTrack);
-            videoTrack.enabled = !videoTrack.enabled;
-        }
     }
+    
+    
 
     const toggleAudio = async() => {
         let audioTrack;
