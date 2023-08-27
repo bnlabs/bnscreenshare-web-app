@@ -110,9 +110,8 @@ const Interface = () => {
                         
                         <Box maw={300} mx="auto">
                         <form onSubmit={form.onSubmit((input) => handleJoinLobby(input))}>
+                            <div className="text-lg font-semibold text-gray-500 p-1">Lobby Id</div>
                             <TextInput
-                            withAsterisk
-                            label="LobbyId"
                             placeholder="23a4e"
                             radius="xl"
                             size="xl"
