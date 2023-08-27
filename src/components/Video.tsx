@@ -5,8 +5,8 @@ import FullscreenOutlinedIcon from '@mui/icons-material/FullscreenOutlined';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
 
-const Video = ({user} : {user:string}) => {
-    const [isMuted, setIsMuted] = useState(false);
+const Video = ({user, defaultMuteValue} : {user:string, defaultMuteValue:boolean}) => {
+    const [isMuted, setIsMuted] = useState(defaultMuteValue);
     const [volume, setVolume] = useState<number>(1);
 
     let id;
@@ -30,6 +30,7 @@ const Video = ({user} : {user:string}) => {
         };
     
         if (video) {
+            video.muted = isMuted;
             video.addEventListener('volumechange', handleVolumeChange);
         }
     
@@ -94,7 +95,7 @@ const StyledVideo = styled.video`
     display: grid;
     gap: 2em;
     background-color: rgb(40, 40, 40, .5);
-    height: 76vh;
+    height: 73vh;
     overflow: hidden;
     border-style: solid;
     border-color: black;

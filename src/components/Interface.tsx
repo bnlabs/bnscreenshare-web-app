@@ -104,7 +104,7 @@ const Interface = () => {
                             }
                             <Button variant="outline" color="gray" onClick={leaveLobby}><LogoutOutlinedIcon/></Button>
                         </div>
-                        <Video user={"1"}/>
+                        <Video user={"1"} defaultMuteValue={isHost ? true : false}/>
                     </div>)
                     : 
                     (<div className="bg-transparent">
