@@ -9,6 +9,7 @@ interface WebRTCContextValues {
     createAnswer: (uid:string, offer: RTCSessionDescriptionInit, connection:HubConnection | null) => Promise<void>;
     addAnswer: (answer: RTCSessionDescriptionInit) => Promise<void>;
     toggleStream: () => Promise<void>;
+    endStream: () => Promise<void>;
     toggleAudio: () => Promise<void>;
   }
 
@@ -160,9 +161,20 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
             }
         }
     }
-    
-    
 
+    const endStream = async() => {
+        let videoTrack = localStream && localStream.getVideoTracks()[0];
+        if (videoTrack && videoTrack.readyState !== 'ended') {
+            localStream?.getTracks().forEach(track => track.stop());
+            
+            let user1 = document.getElementById('user-1') as HTMLMediaElement;
+            if(user1) {
+                user1.srcObject = null;  // Clear the video element source
+            }
+            localStream = null;  // Clear the localStream reference
+        }
+    }
+    
     const toggleAudio = async() => {
         let audioTrack;
         if(localStream)
@@ -197,6 +209,7 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         createAnswer,
         addAnswer,
         toggleStream,
+        endStream,
         toggleAudio }}>
       {children}
     </WebRTCContext.Provider>

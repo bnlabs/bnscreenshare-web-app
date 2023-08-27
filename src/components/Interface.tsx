@@ -60,6 +60,7 @@ const Interface = () => {
     }
     const leaveLobby = async () =>{
         connection?.invoke("LeaveLobby", lobbyId);
+        webrtc?.endStream();
         setLobbyId("");
     }
     const handleCopy = async () => {
