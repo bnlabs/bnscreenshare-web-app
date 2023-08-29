@@ -73,6 +73,9 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
             event.streams[0].getTracks().forEach((track)=>
             {
                 remoteStream?.addTrack(track);
+                track.onended = function() {
+                    remoteStream = null;
+                };
             })
         }
 
@@ -97,6 +100,9 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
             event.streams[0].getTracks().forEach((track)=>
             {
                 remoteStream?.addTrack(track);
+                track.onended = function() {
+                    remoteStream = null;
+                };
             })
         }
 
