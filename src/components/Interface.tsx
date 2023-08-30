@@ -5,7 +5,6 @@ import { TextInput, Button, Group, Box } from '@mantine/core';
 import WebRTCContext from "./WebRTC/WebRTCContext";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import TvOutlinedIcon from '@mui/icons-material/TvOutlined';
-import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import { useForm } from '@mantine/form';
 
 const Interface = () => {
@@ -96,8 +95,8 @@ const Interface = () => {
                             </Button>
                             {isHost ? 
                                 <>
-                                    <Button variant="outline" color="gray" onClick={webrtc?.toggleStream}><TvOutlinedIcon/></Button>
-                                    <Button variant="outline" color="gray" onClick={webrtc?.toggleAudio}><VolumeUpOutlinedIcon/></Button>
+                                    <Button variant="outline" color="gray" onClick={() => webrtc?.toggleStream(lobbyId, connection)}><TvOutlinedIcon/></Button>
+                                    {/* <Button variant="outline" color="gray" onClick={webrtc?.toggleAudio}><VolumeUpOutlinedIcon/></Button> */}
                                 </>
                                 :
                                     ""

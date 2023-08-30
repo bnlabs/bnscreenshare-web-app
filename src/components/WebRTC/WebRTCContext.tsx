@@ -3,12 +3,10 @@ import { createContext, ReactNode } from "react";
 
 interface WebRTCContextValues {
     getPeerConnection: () => Promise<RTCPeerConnection | null>;
-    getLocalStream: () => Promise<MediaStream | null>;
-    getRemoteStream: () => Promise<MediaStream | null>;
     createOffer: (uid:string, connection:HubConnection | null) => Promise<void>;
     createAnswer: (uid:string, offer: RTCSessionDescriptionInit, connection:HubConnection | null) => Promise<void>;
     addAnswer: (answer: RTCSessionDescriptionInit) => Promise<void>;
-    toggleStream: () => Promise<void>;
+    toggleStream: (lobbyId:string, connection:HubConnection | null) => Promise<void>;
     endStream: () => Promise<void>;
     toggleAudio: () => Promise<void>;
   }
@@ -56,17 +54,28 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         remoteStream = new MediaStream();
 
         if(!localStream){
+            console.log("localStream is null, creating a new one");
             localStream = await navigator.mediaDevices.getDisplayMedia(streamSetting);
+            let user1 = document.getElementById('user-1') as HTMLMediaElement;
+            if(user1) {
+                user1.srcObject = localStream;
+            }
         }
 
         localStream.getTracks().forEach((track: MediaStreamTrack) => {
             peerConnection.addTrack(track, localStream as MediaStream);
+            track.onended = function() {
+                localStream = null;
+            };
         });
     
         peerConnection.ontrack = (event) => {
             event.streams[0].getTracks().forEach((track)=>
             {
                 remoteStream?.addTrack(track);
+                track.onended = function() {
+                    remoteStream = null;
+                };
             })
         }
 
@@ -91,6 +100,9 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
             event.streams[0].getTracks().forEach((track)=>
             {
                 remoteStream?.addTrack(track);
+                track.onended = function() {
+                    remoteStream = null;
+                };
             })
         }
 
@@ -128,11 +140,25 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
 
     const addAnswer = async (answer: RTCSessionDescriptionInit) => {
         if(peerConnection && !peerConnection.currentRemoteDescription){
-            peerConnection.setRemoteDescription(answer)
+            peerConnection.setRemoteDescription(answer);
         }
     }
 
-    const toggleStream = async () => {
+    const createOfferToLobby = async (lobbyId:string, connection:HubConnection | null) => {
+        console.log("CREATING OFFER");
+        console.log(lobbyId);
+        await createPeerConnection(lobbyId, connection);
+        if(peerConnection)
+        {
+            let offer = await peerConnection.createOffer();
+            console.log(offer);
+            await peerConnection.setLocalDescription(offer);
+            const text = JSON.stringify({'type': 'offer', 'offer': offer});
+            connection?.invoke("SendOfferToLobby", lobbyId, text);
+        }
+    }
+
+    const toggleStream = async (lobbyId:string, connection:HubConnection | null) => {
         console.log("stream button");
         
         // Check if localStream exists and if it has video tracks
@@ -140,22 +166,11 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         
         // If videoTrack exists and is still active, stop the stream.
         if (videoTrack && videoTrack.readyState !== 'ended') {
-            localStream?.getTracks().forEach(track => track.stop());
-            
-            let user1 = document.getElementById('user-1') as HTMLMediaElement;
-            if(user1) {
-                user1.srcObject = null;  // Clear the video element source
-            }
-    
-            localStream = null;  // Clear the localStream reference
+            await endStream();
         } else {
             // If videoTrack is ended or doesn't exist, try to acquire the stream
             try {
-                localStream = await navigator.mediaDevices.getDisplayMedia(streamSetting);
-                let user1 = document.getElementById('user-1') as HTMLMediaElement;
-                if(user1) {
-                    user1.srcObject = localStream;
-                }
+                createOfferToLobby(lobbyId, connection);
             } catch (err) {
                 console.error("Error acquiring stream: ", err);
             }
@@ -186,25 +201,9 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
             audioTrack.enabled = !audioTrack.enabled;
         }
     }
-
-    const getLocalStream = async () => {
-        if(!localStream){
-            localStream = await navigator.mediaDevices.getDisplayMedia(streamSetting);
-        }
-        return localStream;
-    }
-
-    const getRemoteStream = async () => {
-        if(!remoteStream){
-            remoteStream = new MediaStream();
-        }
-        return remoteStream;
-    }
   return (
     <WebRTCContext.Provider value={{
         getPeerConnection,
-        getLocalStream,
-        getRemoteStream,
         createOffer,
         createAnswer,
         addAnswer,
