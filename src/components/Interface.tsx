@@ -22,15 +22,15 @@ const Interface = () => {
           },
       });
 
-    const handleJoinedGroup = async (lobbyId:string) => {
+    const handleJoinedGroup = (lobbyId:string) => {
         console.log("LobbyId: ", lobbyId);
         setLobbyId(lobbyId);
     }
-    const handleMemberJoined = async (uid: string) =>{
+    const handleMemberJoined = (uid: string) =>{
         console.log("A new user joined: ", uid);
         webrtc?.createOffer(uid, connection);
     }
-    const handleJoinLobby = async ({ lobbyId } : { lobbyId:string }) => {
+    const handleJoinLobby = ({ lobbyId } : { lobbyId:string }) => {
         console.log("lobbyId");
         connection?.invoke("JoinLobby", lobbyId);
         setIsHost(false);
@@ -44,20 +44,20 @@ const Interface = () => {
             webrtc?.addAnswer(message.answer);
         }
         if(message.type === "candidate"){
-            let pc = await webrtc?.getPeerConnection();
+            const pc = await webrtc?.getPeerConnection();
             if(pc){
                 pc.addIceCandidate(message.candidate);
             }
         }
     }
-    const handleUserLeft = async (value:string) =>{
+    const handleUserLeft = (value:string) =>{
         console.log(value);
     }
-    const createLobby = async () => {
+    const createLobby = () => {
         connection?.invoke("CreateLobby");
         setIsHost(true);
     }
-    const leaveLobby = async () =>{
+    const leaveLobby = () =>{
         connection?.invoke("LeaveLobby", lobbyId);
         webrtc?.endStream();
         setLobbyId("");

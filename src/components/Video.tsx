@@ -39,7 +39,7 @@ const Video = ({user, defaultMuteValue} : {user:string, defaultMuteValue:boolean
                 video.removeEventListener('volumechange', handleVolumeChange);
             }
         };
-    }, []);
+    });
     
     const toggleMute = () => {
         const video = videoRef.current;

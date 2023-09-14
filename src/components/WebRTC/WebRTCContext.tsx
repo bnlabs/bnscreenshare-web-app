@@ -2,13 +2,13 @@ import { HubConnection } from "@microsoft/signalr";
 import { createContext, ReactNode } from "react";
 
 interface WebRTCContextValues {
-    getPeerConnection: () => Promise<RTCPeerConnection | null>;
+    getPeerConnection: () => RTCPeerConnection | null;
     createOffer: (uid:string, connection:HubConnection | null) => Promise<void>;
     createAnswer: (uid:string, offer: RTCSessionDescriptionInit, connection:HubConnection | null) => Promise<void>;
-    addAnswer: (answer: RTCSessionDescriptionInit) => Promise<void>;
+    addAnswer: (answer: RTCSessionDescriptionInit) => void;
     toggleStream: (lobbyId:string, connection:HubConnection | null) => Promise<void>;
-    endStream: () => Promise<void>;
-    toggleAudio: () => Promise<void>;
+    endStream: () => void;
+    toggleAudio: () => void;
   }
 
 const WebRTCContext = createContext<WebRTCContextValues | null>(null);
@@ -45,7 +45,7 @@ let peerConnection : RTCPeerConnection;
 
 export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
 
-    const getPeerConnection = async () => {
+    const getPeerConnection = () => {
         return peerConnection;
     };
     
@@ -56,7 +56,7 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         if(!localStream){
             console.log("localStream is null, creating a new one");
             localStream = await navigator.mediaDevices.getDisplayMedia(streamSetting);
-            let user1 = document.getElementById('user-1') as HTMLMediaElement;
+            const user1 = document.getElementById('user-1') as HTMLMediaElement;
             if(user1) {
                 user1.srcObject = localStream;
             }
@@ -88,10 +88,10 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
 
     }
 
-    const createPeerConnectionAnswer = async (uid:string, connection:HubConnection | null) => {
+    const createPeerConnectionAnswer = (uid:string, connection:HubConnection | null) => {
         peerConnection = new RTCPeerConnection(servers);
         remoteStream = new MediaStream();
-        let user2 = document.getElementById('user-1') as HTMLMediaElement;
+        const user2 = document.getElementById('user-1') as HTMLMediaElement;
     
         if(user2) {
             user2.srcObject = remoteStream;
@@ -119,7 +119,7 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         await createPeerConnection(uid, connection);
         if(peerConnection)
         {
-            let offer = await peerConnection.createOffer();
+            const offer = await peerConnection.createOffer();
             console.log(offer);
             await peerConnection.setLocalDescription(offer);
             const text = JSON.stringify({'type': 'offer', 'offer': offer});
@@ -130,7 +130,7 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         console.log(uid);
         console.log(offer);
 
-        await createPeerConnectionAnswer(uid, connection);
+        createPeerConnectionAnswer(uid, connection);
         await peerConnection.setRemoteDescription(offer);
         const answer = await peerConnection.createAnswer();
         await peerConnection.setLocalDescription(answer);
@@ -138,7 +138,7 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
 
     }
 
-    const addAnswer = async (answer: RTCSessionDescriptionInit) => {
+    const addAnswer = (answer: RTCSessionDescriptionInit) => {
         if(peerConnection && !peerConnection.currentRemoteDescription){
             peerConnection.setRemoteDescription(answer);
         }
@@ -150,7 +150,7 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         await createPeerConnection(lobbyId, connection);
         if(peerConnection)
         {
-            let offer = await peerConnection.createOffer();
+            const offer = await peerConnection.createOffer();
             console.log(offer);
             await peerConnection.setLocalDescription(offer);
             const text = JSON.stringify({'type': 'offer', 'offer': offer});
@@ -162,7 +162,7 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         console.log("stream button");
         
         // Check if localStream exists and if it has video tracks
-        let videoTrack = localStream && localStream.getVideoTracks()[0];
+        const videoTrack = localStream && localStream.getVideoTracks()[0];
         
         // If videoTrack exists and is still active, stop the stream.
         if (videoTrack && videoTrack.readyState !== 'ended') {
@@ -177,12 +177,12 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         }
     }
 
-    const endStream = async() => {
-        let videoTrack = localStream && localStream.getVideoTracks()[0];
+    const endStream = () => {
+        const videoTrack = localStream && localStream.getVideoTracks()[0];
         if (videoTrack && videoTrack.readyState !== 'ended') {
             localStream?.getTracks().forEach(track => track.stop());
             
-            let user1 = document.getElementById('user-1') as HTMLMediaElement;
+            const user1 = document.getElementById('user-1') as HTMLMediaElement;
             if(user1) {
                 user1.srcObject = null;  // Clear the video element source
             }
@@ -190,7 +190,7 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
         }
     }
     
-    const toggleAudio = async() => {
+    const toggleAudio = () => {
         let audioTrack;
         if(localStream)
         {
