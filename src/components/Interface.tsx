@@ -10,12 +10,14 @@ import { useForm } from '@mantine/form';
 const Interface = () => {
     const [lobbyId, setLobbyId] = useState("");
     const [isHost, setIsHost] = useState(false);
+    const [userName, setUsername] = useState<string | null>(null);
 
     const connection = useContext(SignalRContext);
     const webrtc = useContext(WebRTCContext);
     const form = useForm({
         initialValues: {
             lobbyId: '',
+            username: ''
           },
           validate: {
             lobbyId: (value) => (/^.{5}$/.test(value) ? null : 'Invalid Id'),
@@ -30,10 +32,11 @@ const Interface = () => {
         console.log("A new user joined: ", uid);
         webrtc?.createOffer(uid, connection);
     }
-    const handleJoinLobby = ({ lobbyId } : { lobbyId:string }) => {
+    const handleJoinLobby = ({ lobbyId, username } : { lobbyId:string, username:string }) => {
         console.log("lobbyId");
         connection?.invoke("JoinLobby", lobbyId);
         setIsHost(false);
+        setUsername(username);
     }
     const handleReceiveOffer = async (offer:string, uid:string) => {
         const message = JSON.parse(offer);
@@ -117,6 +120,14 @@ const Interface = () => {
                             size="xl"
                             {...form.getInputProps('lobbyId')}
                             />
+
+                            <div className="text-lg font-semibold text-gray-500 p-1">Username</div>
+                                                        <TextInput
+                                                        placeholder="Varvalian"
+                                                        radius="xl"
+                                                        size="xl"
+                                                        {...form.getInputProps('username')}
+                                                        />
 
                             <Group position="right" mt="md">
                             <div className="px-8">
