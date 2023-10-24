@@ -10,7 +10,7 @@ import { useForm } from '@mantine/form';
 const Interface = () => {
     const [lobbyId, setLobbyId] = useState("");
     const [isHost, setIsHost] = useState(false);
-    const [userName, setUsername] = useState<string | null>(null);
+    const [userName, setUsername] = useState<string>("");
 
     const connection = useContext(SignalRContext);
     const webrtc = useContext(WebRTCContext);
@@ -59,6 +59,7 @@ const Interface = () => {
     const createLobby = () => {
         connection?.invoke("CreateLobby");
         setIsHost(true);
+        setUsername("host");
     }
     const leaveLobby = () =>{
         connection?.invoke("LeaveLobby", lobbyId);
@@ -93,6 +94,7 @@ const Interface = () => {
                     (<div className="LobbyUI">
                         <div className="LobbyControl flex my-2">
                             <p className="mx-3 mt-1">Lobby ID: {lobbyId}</p>
+                            <p className="mx-3 mt-1">Username: {userName}</p>
                             <Button variant="outline" color="gray" onClick={handleCopy}>
                                 Copy Lobby ID
                             </Button>
