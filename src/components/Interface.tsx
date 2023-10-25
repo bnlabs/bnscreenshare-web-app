@@ -6,16 +6,19 @@ import WebRTCContext from "./WebRTC/WebRTCContext";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import TvOutlinedIcon from '@mui/icons-material/TvOutlined';
 import { useForm } from '@mantine/form';
+import Chat from "./Chat/Chat";
 
 const Interface = () => {
     const [lobbyId, setLobbyId] = useState("");
     const [isHost, setIsHost] = useState(false);
+    const [userName, setUsername] = useState<string>("");
 
     const connection = useContext(SignalRContext);
     const webrtc = useContext(WebRTCContext);
     const form = useForm({
         initialValues: {
             lobbyId: '',
+            username: ''
           },
           validate: {
             lobbyId: (value) => (/^.{5}$/.test(value) ? null : 'Invalid Id'),
@@ -30,10 +33,11 @@ const Interface = () => {
         console.log("A new user joined: ", uid);
         webrtc?.createOffer(uid, connection);
     }
-    const handleJoinLobby = ({ lobbyId } : { lobbyId:string }) => {
+    const handleJoinLobby = ({ lobbyId, username } : { lobbyId:string, username:string }) => {
         console.log("lobbyId");
         connection?.invoke("JoinLobby", lobbyId);
         setIsHost(false);
+        setUsername(username);
     }
     const handleReceiveOffer = async (offer:string, uid:string) => {
         const message = JSON.parse(offer);
@@ -56,6 +60,7 @@ const Interface = () => {
     const createLobby = () => {
         connection?.invoke("CreateLobby");
         setIsHost(true);
+        setUsername("host");
     }
     const leaveLobby = () =>{
         connection?.invoke("LeaveLobby", lobbyId);
@@ -90,20 +95,23 @@ const Interface = () => {
                     (<div className="LobbyUI">
                         <div className="LobbyControl flex my-2">
                             <p className="mx-3 mt-1">Lobby ID: {lobbyId}</p>
+                            <p className="mx-3 mt-1">Username: {userName}</p>
                             <Button variant="outline" color="gray" onClick={handleCopy}>
                                 Copy Lobby ID
                             </Button>
                             {isHost ? 
                                 <>
                                     <Button variant="outline" color="gray" onClick={() => webrtc?.toggleStream(lobbyId, connection)}><TvOutlinedIcon/></Button>
-                                    {/* <Button variant="outline" color="gray" onClick={webrtc?.toggleAudio}><VolumeUpOutlinedIcon/></Button> */}
                                 </>
                                 :
                                     ""
                             }
                             <Button variant="outline" color="gray" onClick={leaveLobby}><LogoutOutlinedIcon/></Button>
                         </div>
-                        <Video user={"1"} defaultMuteValue={isHost ? true : false}/>
+                        <div className="flex flex-row">
+                            <Video user={"1"} defaultMuteValue={isHost ? true : false}/>
+                            <Chat Username={userName} LobbyId={lobbyId}/>
+                        </div>
                     </div>)
                     : 
                     (<div className="bg-transparent">
@@ -117,6 +125,14 @@ const Interface = () => {
                             size="xl"
                             {...form.getInputProps('lobbyId')}
                             />
+
+                            <div className="text-lg font-semibold text-gray-500 p-1">Username</div>
+                                                        <TextInput
+                                                        placeholder="Varvalian"
+                                                        radius="xl"
+                                                        size="xl"
+                                                        {...form.getInputProps('username')}
+                                                        />
 
                             <Group position="right" mt="md">
                             <div className="px-8">

@@ -99,6 +99,7 @@ const StyledVideo = styled.video`
     overflow: hidden;
     border-style: solid;
     border-color: black;
+    border-radius: 10px;
 `
 
 export default Video;
