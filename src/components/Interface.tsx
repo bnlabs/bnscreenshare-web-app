@@ -6,6 +6,7 @@ import WebRTCContext from "./WebRTC/WebRTCContext";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import TvOutlinedIcon from '@mui/icons-material/TvOutlined';
 import { useForm } from '@mantine/form';
+import Chat from "./Chat/Chat";
 
 const Interface = () => {
     const [lobbyId, setLobbyId] = useState("");
@@ -101,14 +102,16 @@ const Interface = () => {
                             {isHost ? 
                                 <>
                                     <Button variant="outline" color="gray" onClick={() => webrtc?.toggleStream(lobbyId, connection)}><TvOutlinedIcon/></Button>
-                                    {/* <Button variant="outline" color="gray" onClick={webrtc?.toggleAudio}><VolumeUpOutlinedIcon/></Button> */}
                                 </>
                                 :
                                     ""
                             }
                             <Button variant="outline" color="gray" onClick={leaveLobby}><LogoutOutlinedIcon/></Button>
                         </div>
-                        <Video user={"1"} defaultMuteValue={isHost ? true : false}/>
+                        <div className="flex flex-row">
+                            <Video user={"1"} defaultMuteValue={isHost ? true : false}/>
+                            <Chat Username={userName} LobbyId={lobbyId}/>
+                        </div>
                     </div>)
                     : 
                     (<div className="bg-transparent">
