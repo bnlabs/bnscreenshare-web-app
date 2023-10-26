@@ -108,7 +108,7 @@ const Interface = () => {
                             }
                             <Button variant="outline" color="gray" onClick={leaveLobby}><LogoutOutlinedIcon/></Button>
                         </div>
-                        <div className="flex flex-row">
+                        <div className="flex flex-row items-start">
                             <Video user={"1"} defaultMuteValue={isHost ? true : false}/>
                             <Chat Username={userName} LobbyId={lobbyId}/>
                         </div>

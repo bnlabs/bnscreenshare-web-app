@@ -32,19 +32,19 @@ const Chat = ({Username, LobbyId} : {Username: string, LobbyId : string}) => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
     
-    return (<div className="flex-col relative m-10 ml-3 h-5/6 w-1/5 bg-gray-900 rounded-md">
-        <div className="messages h-96 w-96 flex-1 p-10 overflow-scroll break-words no-scrollbar">
-                    {messages.map((message: { username: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; content: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }, index: Key | null | undefined) => (
-                        <div key={index} className="message mb-1">
-                            <strong>{message.username}:</strong> {message.content}
-                        </div>
-                    ))}
-        <div className="mt-7" ref={messagesEndRef}></div>
+    return (<div className="flex-col relative ml-3 h-75vh w-1/5 bg-gray-900 rounded-md overflow-hidden">
+        <div className="messages h-5/6 w-full flex-1 p-10 overflow-scroll break-words no-scrollbar">
+            {messages.map((message: { username: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; content: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }, index: Key | null | undefined) => (
+                <div key={index} className="message mb-1">
+                    <strong>{message.username}:</strong> {message.content}
+                </div>
+            ))}
+            <div className="h-1/5" ref={messagesEndRef}></div>
         </div>
 
-        <form onSubmit={sendMessage} className="InputArea border-t-2">
-        <input className="bg-gray-950 border-r-2" value={content} onChange={(e) => setContent(e.target.value)} placeholder="say something nice" />
-        <button className="ml-1" type="submit" disabled={!content}>Send</button>
+        <form onSubmit={sendMessage} className="InputArea border-2 border-gray-700 bg-gray-900 absolute bottom-0 w-full">
+            <input className="bg-gray-950 border-r-2 ml-1 w-3/5" value={content} onChange={(e) => setContent(e.target.value)} placeholder="say something nice" />
+            <button className="ml-1" type="submit" disabled={!content}>Send</button>
         </form> 
    
     </div>
