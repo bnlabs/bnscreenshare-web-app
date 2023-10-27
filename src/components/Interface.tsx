@@ -94,8 +94,11 @@ const Interface = () => {
                 {lobbyId ? 
                     (<div className="LobbyUI">
                         <div className="LobbyControl flex my-2">
-                            <p className="mx-3 mt-1">Lobby ID: {lobbyId}</p>
-                            <p className="mx-3 mt-1">Username: {userName}</p>
+                            <p className="ml-3 mt-1 font-bold text-slate-500">Lobby ID:</p>
+                            <p className="mt-1 ml-1 mr-3">{lobbyId}</p>
+                            
+                            <p className="ml-3 mt-1 font-bold text-slate-500">Username:</p>
+                            <p className="mt-1 ml-1 mr-3">{userName}</p>
                             <Button variant="outline" color="gray" onClick={handleCopy}>
                                 Copy Lobby ID
                             </Button>
