@@ -29,6 +29,7 @@ const Interface = () => {
         console.log("LobbyId: ", lobbyId);
         setLobbyId(lobbyId);
     }
+    
     const handleMemberJoined = (uid: string) =>{
         console.log("A new user joined: ", uid);
         webrtc?.createOffer(uid, connection);
