@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import Video from "./Video";
 import SignalRContext from "./SignalR/SignalRContext";
-import { TextInput, Button, Group, Box } from '@mantine/core';
+import { TextInput, Button, Box } from '@mantine/core';
 import WebRTCContext from "./WebRTC/WebRTCContext";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import TvOutlinedIcon from '@mui/icons-material/TvOutlined';
@@ -91,7 +91,7 @@ const Interface = () => {
     
     return (
         <>
-            <div className="ControlPanel text-white p-3">
+            <div className="home-page-panel text-white p-3">
                 {lobbyId ? 
                     (<div className="LobbyUI">
                         <div className="LobbyControl flex my-2">
@@ -118,34 +118,57 @@ const Interface = () => {
                         </div>
                     </div>)
                     : 
-                    (<div className="bg-transparent">
-                        
-                        <Box maw={300} mx="auto">
-                        <form onSubmit={form.onSubmit((input) => handleJoinLobby(input))}>
-                            <div className="text-lg font-semibold text-gray-500 p-1">Lobby Id</div>
-                            <TextInput
-                            placeholder="23a4e"
-                            radius="xl"
-                            size="xl"
-                            {...form.getInputProps('lobbyId')}
-                            />
+                    (<div className="bg-slate-700 rounded-lg w-2/4 h-3/6 left-1/4 right-1/4 absolute flex items-center justify-between">
+                        <div className="Info text-xl m-10">
+                            <h1 className="font-bold text-5xl drop-shadow-2xl">
+                                No Hassle <br/>Screen Sharing
+                            </h1>
+                            <br/>
+                                <ul>
+                                    <li className="flex flex-row"><img className="h-5 mr-2" src="/bnft.svg"/>Up to 1080p 60fps</li>
+                                    <li className="flex flex-row"><img className="h-5 mr-2" src="/bnft.svg"/>Includes lobby chat system</li>
+                                    <li className="flex flex-row"><img className="h-5 mr-2" src="/bnft.svg"/>No login necessary</li>
+                                    <li className="flex flex-row"><img className="h-5 mr-2" src="/bnft.svg"/>Nothing in the way</li>
+                                </ul>
+                        </div>
+                        <div className="bg-transparent bg-gray-800 rounded-lg w-1/3 h-4/6 relative drop-shadow-lg m-10 mt-0 mb-0">
+                            <div className="Join-Lobby border-b-2 border-slate-700">
+                                <form onSubmit={form.onSubmit((input) => handleJoinLobby(input))}>
+                                    <div className="mx-3">
+                                        <div className="text-md font-semibold text-gray-500 p-1">Lobby Id</div>
+                                        <TextInput
+                                            placeholder="23a4e"
+                                            radius="md"
+                                            size="md"
+                                            {...form.getInputProps('lobbyId')}
+                                        />
+                                    </div>
 
-                            <div className="text-lg font-semibold text-gray-500 p-1">Username</div>
-                                                        <TextInput
-                                                        placeholder="Varvalian"
-                                                        radius="xl"
-                                                        size="xl"
-                                                        {...form.getInputProps('username')}
-                                                        />
+                                    <div className="mx-3">
+                                        <div className="text-md font-semibold text-gray-500 p-1">Username</div>
+                                                                    <TextInput
+                                                                    placeholder="Varvalian"
+                                                                    radius="md"
+                                                                    size="md"
+                                                                    {...form.getInputProps('username')}
+                                                                    />
+                                    </div>
 
-                            <Group position="right" mt="md">
-                            <div className="px-8">
-                                <Button variant="outline" color="gray" onClick={createLobby}>Create Lobby</Button>
-                                <Button variant="outline" color="gray" type="submit">Join Lobby</Button>
+                                    {/* <Group position="right" mt="md"> */}
+                                    <div className="px-8 m-3 justify-center items-center flex flex-row">
+                                        {/* <Button variant="outline" color="gray" onClick={createLobby}>Create Lobby</Button> */}
+                                        <Button variant="outline" color="gray" type="submit">Join Lobby</Button>
+                                    </div>
+                                    {/* </Group> */}
+                                </form>
                             </div>
-                            </Group>
-                        </form>
-                        </Box>
+
+                            <div className="Host-Lobby h-1/3">
+                                    <div className="m-3 mt-8 justify-center items-center flex flex-row">
+                                        <Button variant="outline" color="gray" onClick={createLobby}>Host Lobby</Button>
+                                    </div>
+                            </div>
+                        </div>
                     </div>)
                 }
             </div>
