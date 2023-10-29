@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and Deploy Job
+
+    steps:
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '16.x'
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    
+    - name: Install dependencies
+      run: |
+        curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
+        pnpm install
+
+    - name: Build
+      run: pnpm build
+
+    # - name: Run Unit Tests
+    #   run: pnpm test
