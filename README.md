@@ -5,5 +5,15 @@
 A simple and convenient way to screenshare through browser
 
 # Run locally
+Prerequisites:
+* Have [Node.JS](https://nodejs.org/en) installed (version 16 or later will work)
+
+Install and Run:
+* clone the repository `git clone https://github.com/Hy0tic/bnscreenshare-web-app.git`
+* run `npm install` to install dependencies
+* run `npm run dev` to run locally
 
 # Features
+* 1080p@60FPS streaming
+* No login required
+* Includes chat system in lobby
