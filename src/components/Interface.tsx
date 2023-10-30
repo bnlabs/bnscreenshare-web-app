@@ -7,6 +7,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import TvOutlinedIcon from '@mui/icons-material/TvOutlined';
 import { useForm } from '@mantine/form';
 import Chat from "./Chat/Chat";
+import Canvas from "./Canvas";
 
 const Interface = () => {
     const [lobbyId, setLobbyId] = useState("");
@@ -116,6 +117,7 @@ const Interface = () => {
                             <Video user={"1"} defaultMuteValue={isHost ? true : false}/>
                             <Chat Username={userName} LobbyId={lobbyId}/>
                         </div>
+                        <Canvas/>
                     </div>)
                     : 
                     (<div className="bg-slate-700 rounded-lg w-2/4 h-3/6 left-1/4 right-1/4 absolute flex items-center justify-between">
