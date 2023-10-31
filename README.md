@@ -13,7 +13,7 @@ Install and Run:
 * run `npm install` to install dependencies
 * run `npm run dev` to run locally
 
-# Features
+# Feature
 * 1080p@60FPS streaming
 * No login required
 * Includes chat system in lobby
