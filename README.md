@@ -4,7 +4,7 @@
 
 A simple and convenient way to screenshare through browser
 
-# Run locally
+# Run Locally
 Prerequisites:
 * Have [Node.JS](https://nodejs.org/en) installed (version 16 or later will work)
 
