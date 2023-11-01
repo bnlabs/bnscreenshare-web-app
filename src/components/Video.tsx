@@ -182,9 +182,9 @@ const Video = ({user, defaultMuteValue} : {user:string, defaultMuteValue:boolean
     }
 
     return (<div className='relative'>
-            <StyledVideo ref={videoRef} className="video-player" id={id} autoPlay playsInline onClick={handleFullScreen}>
-            </StyledVideo>
-            <canvas
+        <StyledVideo ref={videoRef} className="video-player" id={id} autoPlay playsInline onClick={handleFullScreen}>
+        </StyledVideo>
+        <canvas
                 className='absolute h-73vh w-130vh top-2 left-2 bg-transparent rounded-lg border-solid border-gray-600 border-4'
                 ref={canvasRef}
                 onMouseDown={startPainting}
@@ -205,14 +205,6 @@ const Video = ({user, defaultMuteValue} : {user:string, defaultMuteValue:boolean
                 {isMuted ? <VolumeOffOutlinedIcon/> : <VolumeUpOutlinedIcon/>}
             </Button>
             <Button variant="outline" color="gray" onClick={handleFullScreen}><FullscreenOutlinedIcon/></Button>
-        </div>
-
-        <div className="flex flex-col p-5 w-72 bg-slate-800 rounded-lg" id="toolbar" onChange={handleToolbar}>
-            <button className="p-2 border-white border hover:bg-slate-600" id="clear" onClick={()=>ClearCanvas()}>Clear</button>
-            <label className="">Stroke</label>
-            <input className="w-full bg-slate-700" type="color" id="stroke" defaultValue={strokeStyle} />
-            <label className="">Line Width</label>
-            <input className="text-black bg-slate-600" type="number" id="lineWidth" defaultValue={lineWidth} value={lineWidth} />
         </div>
     </div>)
 }
