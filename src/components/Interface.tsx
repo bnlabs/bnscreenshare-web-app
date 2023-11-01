@@ -118,7 +118,7 @@ const Interface = () => {
                         </div>
                     </div>)
                     : 
-                    (<div className="bg-slate-700 rounded-lg w-2/4 h-3/6 left-1/4 right-1/4 absolute flex items-center justify-between">
+                    (<div className="bg-slate-700 rounded-lg w-2/4 h-3/6 left-1/4 right-1/4 absolute flex items-center justify-between mt-20">
                         <div className="Info text-xl m-10">
                             <h1 className="font-bold text-5xl drop-shadow-2xl">
                                 No Hassle <br/>Screen Sharing
