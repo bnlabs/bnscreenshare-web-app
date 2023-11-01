@@ -19,3 +19,6 @@ Install and Run:
 * No login required
 * Includes chat system in lobby
 * Free
+\
+\
+ **Note**: due to browser limitations, users can only share audio through Google Chrome, sharing full audio isn't possible through browsers but sharing tab's audio is possible
