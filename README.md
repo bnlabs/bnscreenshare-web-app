@@ -1,6 +1,7 @@
 # bn-screenshare web app
 [![CodeFactor](https://www.codefactor.io/repository/github/hy0tic/bnscreenshare-web-app/badge)](https://www.codefactor.io/repository/github/hy0tic/bnscreenshare-web-app)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Hy0tic_bnscreenshare-web-app&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Hy0tic_bnscreenshare-web-app)
+[![Build and deploy](https://github.com/Hy0tic/bnscreenshare-web-app/actions/workflows/azure-static-web-apps-thankful-bush-0e0949c0f.yml/badge.svg)](https://github.com//Hy0tic/bnscreenshare-web-app/actions/workflows/azure-static-web-apps-thankful-bush-0e0949c0f.yml) 
 
 A simple and convenient way to screenshare through browser
 
