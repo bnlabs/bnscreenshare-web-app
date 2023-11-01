@@ -21,4 +21,5 @@ Install and Run:
 * Free
 \
 \
- **Note**: due to browser limitations, users can only share audio through Google Chrome, sharing full audio isn't possible through browsers but sharing tab's audio is possible
+ **Note**: 
+* Due to browser limitations, sharing an app's audio or the whole computer's audio isn't possible, however, with Google Chrome, sharing a tab's audio is possible
