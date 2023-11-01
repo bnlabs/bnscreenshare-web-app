@@ -47,14 +47,6 @@ const Video = ({user, defaultMuteValue} : {user:string, defaultMuteValue:boolean
         };
     });
 
-    // canvas useEffect()
-    useEffect(() => {
-        // if (canvasRef.current) {
-        //     const canvas = canvasRef.current;
-        //     canvas.width = window.innerWidth;
-        //     canvas.height = window.innerHeight;
-        //   }
-      }, []);
     
     const toggleMute = () => {
         const video = videoRef.current;
@@ -191,7 +183,7 @@ const Video = ({user, defaultMuteValue} : {user:string, defaultMuteValue:boolean
                 onMouseUp={endPainting}
                 onMouseMove={paint}
             />
-        <div className='buttons my-2'>
+        <div className='absolute buttons right-0'>
             <input
                 className='mx-2'
                 type="range" 
@@ -205,6 +197,20 @@ const Video = ({user, defaultMuteValue} : {user:string, defaultMuteValue:boolean
                 {isMuted ? <VolumeOffOutlinedIcon/> : <VolumeUpOutlinedIcon/>}
             </Button>
             <Button variant="outline" color="gray" onClick={handleFullScreen}><FullscreenOutlinedIcon/></Button>
+        </div>
+
+        <div className="flex flex-row ml-3 p-5 bg-slate-500 rounded-lg w-96 gap-4 h-20" id="toolbar" onChange={handleToolbar}>
+            <>
+                <button className="p-2 border-white border hover:bg-slate-800 text-sm h-10" id="clear" onClick={()=>ClearCanvas()}>Clear</button>
+            </>
+            <div className='pt-2 flex flex-row gap-2'>
+                <label className="text-sm">Stroke</label>
+                <input className="w-12 h-5" type="color" id="stroke" defaultValue={strokeStyle}/>
+            </div>
+            <div className='pt-2 flex flex-row gap-2'>
+                <label className="text-sm">LineWidth</label>
+                <input className=" h-5 w-20 text-black" type="number" id="lineWidth" defaultValue={lineWidth} value={lineWidth} />
+            </div>
         </div>
     </div>)
 }
