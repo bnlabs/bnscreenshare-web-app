@@ -1,5 +1,6 @@
 import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useContext, useEffect, useRef, useState } from "react";
 import SignalRContext from "../SignalR/SignalRContext";
+import EmojiPickerButton from "./EmojiPickerButton";
 
 type Message = 
 {
@@ -53,9 +54,15 @@ const Chat = ({Username, LobbyId} : {Username: string, LobbyId : string}) => {
             <div className="h-1/5" ref={messagesEndRef}></div>
         </div>
 
-        <form onSubmit={sendMessage} className="InputArea border-2 border-gray-700 bg-gray-900 absolute bottom-0 w-full">
-            <input className="bg-gray-950 border-r-2 ml-1 w-3/5" value={content} onChange={(e) => setContent(e.target.value)} placeholder="say something nice" />
-            <button className="ml-1" type="submit" disabled={!content}>Send</button>
+        <form onSubmit={sendMessage} className="InputArea border-2 border-gray-700 bg-gray-900 absolute bottom-0 w-full h-auto">
+            <input className="bg-gray-950 ml-1 w-full" value={content} onChange={(e) => setContent(e.target.value)} placeholder="say something nice" />
+            <div className="absolute inset-y-0 right-2 inline-flex items-center bg-slate-700">
+                <EmojiPickerButton
+                    onEmojiPick={(emoji) =>
+                        setContent((content) => content.concat(emoji))
+                    }
+                />
+            </div>
         </form> 
    
     </div>
