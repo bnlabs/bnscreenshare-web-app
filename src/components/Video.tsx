@@ -72,7 +72,7 @@ const Video = ({user, defaultMuteValue} : {user:string, defaultMuteValue:boolean
     return (<div className='relative'>
         <StyledVideo ref={videoRef} className="video-player" id={id} autoPlay playsInline onClick={handleFullScreen}>
         </StyledVideo>
-        <div className='buttons my-2'>
+        <div className='absolute buttons right-0'>
             <input
                 className='mx-2'
                 type="range" 
