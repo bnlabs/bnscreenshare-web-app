@@ -17,4 +17,4 @@ Install and Run:
 * 1080p@60FPS streaming
 * No login required
 * Includes chat system in lobby
-* Free of charge
+* Free
