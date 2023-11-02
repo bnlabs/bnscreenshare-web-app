@@ -23,3 +23,8 @@ Install and Run:
 \
  **Note**: 
 * Due to browser limitations, sharing an app's audio or the whole computer's audio isn't possible, however, with Google Chrome, sharing a tab's audio is possible
+
+# Technologies
+* React
+* Vite
+* Mantine
