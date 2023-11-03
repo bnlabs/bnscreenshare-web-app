@@ -27,4 +27,4 @@ Install and Run:
 # Technologies
 * React
 * Vite
-* Mantine
+* MantineUI
