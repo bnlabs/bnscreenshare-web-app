@@ -55,9 +55,7 @@ const Interface = () => {
             }
         }
     }
-    const handleUserLeft = (value:string) =>{
-        console.log(value);
-    }
+    
     const createLobby = () => {
         connection?.invoke("CreateLobby");
         setIsHost(true);
@@ -83,7 +81,6 @@ const Interface = () => {
             connection.on("JoinedGroup", handleJoinedGroup);
             connection.on("MemberJoined", handleMemberJoined);
             connection.on("ReceivingOffer", handleReceiveOffer);
-            connection.on("CallerLeft", handleUserLeft);
           })
           .catch((e) => console.log("Connection failed: ", e));
         }, [])

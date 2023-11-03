@@ -18,6 +18,7 @@ const Chat = ({Username, LobbyId} : {Username: string, LobbyId : string}) => {
     useEffect(() => {
         connection?.on("ReceiveMessage", handleReceiveMessage);
         connection?.on("MemberJoined", handleMemberJoined);
+        connection?.on("CallerLeft", handleUserLeft);
         }, [])
 
     const sendMessage = async (e: { preventDefault: () => void; }) => {
@@ -43,7 +44,11 @@ const Chat = ({Username, LobbyId} : {Username: string, LobbyId : string}) => {
     const handleMemberJoined = (uid: string) => {
         connection?.invoke("SendMessage", "Notification", `A new user joined: ${ uid }`, LobbyId);
     }
-    
+
+    const handleUserLeft = (value:string) =>{
+        connection?.invoke("SendMessage", "Notification", `${value}`, LobbyId);
+    }
+
     return (<div className="flex-col relative ml-3 h-75vh w-1/5 bg-gray-900 rounded-md overflow-hidden">
         <div className="messages h-5/6 w-full flex-1 p-10 overflow-scroll break-words no-scrollbar text-slate-500">
             {messages.map((message: { username: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; content: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }, index: Key | null | undefined) => (
