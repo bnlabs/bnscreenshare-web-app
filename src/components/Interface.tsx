@@ -125,7 +125,6 @@ const Interface = () => {
                                     <li className="flex flex-row"><img className="h-5 mr-2" src="https://bucket.bn-chat.net/bnft.svg"/>Up to 1080p 60fps</li>
                                     <li className="flex flex-row"><img className="h-5 mr-2" src="https://bucket.bn-chat.net/bnft.svg"/>Includes lobby chat system</li>
                                     <li className="flex flex-row"><img className="h-5 mr-2" src="https://bucket.bn-chat.net/bnft.svg"/>No login necessary</li>
-                                    <li className="flex flex-row"><img className="h-5 mr-2" src="https://bucket.bn-chat.net/bnft.svg"/>Nothing in the way</li>
                                 </ul>
                         </div>
                         <Box className=" bg-gray-800 rounded-lg w-1/3 h-4/6 relative drop-shadow-lg m-10 mt-0 mb-0">
