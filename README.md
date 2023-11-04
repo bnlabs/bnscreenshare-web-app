@@ -5,6 +5,8 @@
 
 A simple and convenient way to screenshare through browser
 
+[link](https://thankful-bush-0e0949c0f.3.azurestaticapps.net/)
+
 # Run Locally
 Prerequisites:
 * Have [Node.JS](https://nodejs.org/en) installed (version 16 or later will work)
