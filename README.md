@@ -25,7 +25,7 @@ Install and Run:
 \
 \
  **Note**: 
-* Due to browser limitations, sharing an app's audio or the whole computer's audio isn't possible, however, with Google Chrome, sharing a tab's audio is possible
+* Due to browser limitations, sharing a window's audio isn't possible, however, with Google Chrome, sharing a tab's audio or system audio is possible
 
 # Technologies
 * React
