@@ -49,5 +49,5 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
       run: |
-        ssh-keyscan -H ${{ secrets.PROD_SSH_HOST}} >> ~/.ssh/known_hosts
-        rsync -av --delete ./dist/ ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }}:/home/kevin/bnscreenshare/
+        #ssh-keyscan -H ${{ secrets.PROD_SSH_HOST}} >> ~/.ssh/known_hosts
+        rsync -av --delete ./dist/ ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }}:/bnscreenshare/
