@@ -39,25 +39,23 @@ jobs:
     # - name: Run Unit Tests
     #   run: pnpm test
 
-    - name: Upload build to VPS
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.PROD_SSH_HOST }}
-        username: ${{ secrets.PROD_SSH_USER }}
-        password: ${{ secrets.VPS_PASSWORD }}
-        port: 22
-        script: |
-          whoami
-          rsync -av --delete ./dist/ ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }}:/home/kevin/bnscreenshare/
-
-    # - name: Install SSH Key
-    #   uses: shimataro/ssh-key-action@v2.5.1
+    # - name: Upload build to VPS
+    #   uses: appleboy/ssh-action@master
     #   with:
-    #     key: ${{ secrets.SSH_KEY }}
-    #     known_hosts: "poggers"
+    #     host: ${{ secrets.PROD_SSH_HOST }}
+    #     username: ${{ secrets.PROD_SSH_USER }}
+    #     password: ${{ secrets.VPS_PASSWORD }}
+    #     port: 22
+    #     script: |
+    #       whoami
+    #       rsync -av --delete ./dist/ ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }}:/home/kevin/bnscreenshare/
 
-    # - name: Copy build directory to server
-    #   env:
-    #     SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-    #   run: |
-    #     rsync -av --delete ./dist/ ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }}:/home/kevin/bnscreenshare/
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2.5.1
+      with:
+        key: ${{ secrets.SSH_KEY }}
+        known_hosts: "poggers"
+
+    - name: Copy build directory to server
+      run: |
+        rsync -av --delete ./dist/ ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }}:/home/kevin/bnscreenshare/
