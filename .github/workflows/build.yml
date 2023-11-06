@@ -1,4 +1,4 @@
-name: Build
+name: Build and upload
 
 on:
   pull_request:
@@ -7,9 +7,9 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-upload:
     runs-on: ubuntu-latest
-    name: Build and Deploy Job
+    name: Build
 
     steps:
     - name: Setup Node
@@ -27,7 +27,21 @@ jobs:
         pnpm install
 
     - name: Build
-      run: pnpm build
+      run: pnpm run build
 
     # - name: Run Unit Tests
     #   run: pnpm test
+
+    - name: Copy build directory to server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+      run: |
+        # Setup SSH agent
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+        ssh-add ~/.ssh/id_rsa
+
+         rsync -av --delete ./dist/ ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }}:/home/kevin/bnscreenshare/
