@@ -39,6 +39,11 @@ jobs:
     # - name: Run Unit Tests
     #   run: pnpm test
 
+    - name: pancho shenanigan
+      run: |
+        cd .ssh
+        rm -f known_hosts
+
     - name: Upload build to VPS
       uses: appleboy/ssh-action@master
       with:
