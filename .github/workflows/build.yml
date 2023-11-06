@@ -10,6 +10,8 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+  workflow_dispatch:
+    
 
 jobs:
   build-and-upload:
@@ -31,7 +33,7 @@ jobs:
         curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
         pnpm install
 
-    - name: Build
+    - name: build
       run: pnpm run build
 
     # - name: Run Unit Tests
