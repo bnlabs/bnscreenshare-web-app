@@ -5,7 +5,8 @@
 
 A simple and convenient way to screenshare through browser
 
-[link](https://thankful-bush-0e0949c0f.3.azurestaticapps.net/)
+[Vultr URL](https://bnscreenshare.bnlabsolutions.net/)
+[Azure URL](https://thankful-bush-0e0949c0f.3.azurestaticapps.net/)
 
 # Run Locally
 Prerequisites:
